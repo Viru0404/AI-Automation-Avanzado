@@ -1,0 +1,188 @@
+{
+  "name": "checkpoint 1 _virginia_miranda",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "382e710d-b510-465c-b381-e3dea163e013",
+      "name": "When chat message received",
+      "webhookId": "934f8737-3d05-4a8a-a33d-0ea91ff02d37"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "ROL\n\nEres un agente de soporte al cliente de una empresa.\n\nÁMBITO\n\nTu función es analizar las consultas recibidas, utilizar las herramientas disponibles cuando sea necesario y proporcionar respuestas claras y precisas.\n\nOBJETIVO\n\nResolver las consultas de soporte utilizando la información disponible y reducir la necesidad de intervención humana.\n\nREGLAS\n\n- Utiliza las herramientas disponibles únicamente cuando sean necesarias para resolver la consulta.\n- Utiliza Google Sheets cuando necesites consultar información almacenada en la base conectada.\n- No inventes información.\n- Si no encuentras información suficiente para responder, indícalo claramente.\n- No ejecutes acciones fuera del ámbito de soporte.\n- No modifiques información salvo que la herramienta y la instrucción del usuario lo permitan explícitamente.\n- Mantén un tono profesional, claro y conciso.\n- No utilices lenguaje inclusivo.\n\nESCALAMIENTO\n\nSi la consulta no puede resolverse con la información disponible o requiere una acción fuera de tus permisos, informa que requiere revisión humana.",
+          "maxIterations": 7
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        0
+      ],
+      "id": "aec7fec6-3450-4e99-a946-24e11cc4471f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utiliza esta herramienta para consultar información almacenada en la base de datos de soporte de Google Sheets.\n\nDebes utilizarla cuando el usuario solicite información sobre clientes, empresas, consultas, estados de solicitudes o cualquier otro dato que pueda encontrarse registrado en la hoja.\n\nUtiliza la herramienta cuando necesites verificar información antes de responder y dicha información no esté disponible directamente en el mensaje del usuario.\n\nNo utilices esta herramienta para preguntas generales que puedan responderse sin consultar la base.\n\nSi la información solicitada no se encuentra en Google Sheets, no inventes una respuesta. Informa al usuario que no se encontró información suficiente y, cuando corresponda, indica que la consulta requiere revisión humana.\n\nLa herramienta es de consulta y no debe utilizarse para modificar información salvo que exista una operación explícitamente configurada para ello.",
+        "documentId": {
+          "__rl": true,
+          "value": "1_1vL_2Bpt1uNGto8ISC_Ox7C0buweccKmycyvMh0Qj8",
+          "mode": "list",
+          "cachedResultName": "Base soporte",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_1vL_2Bpt1uNGto8ISC_Ox7C0buweccKmycyvMh0Qj8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Check Point 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_1vL_2Bpt1uNGto8ISC_Ox7C0buweccKmycyvMh0Qj8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        208
+      ],
+      "id": "cb077035-f988-4180-9359-82abd0da3e6f",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3MtShFwz3nF8Ni4x",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0BLCUXRKH7",
+          "mode": "list",
+          "cachedResultName": "todo-vm-studio"
+        },
+        "text": "🤖 CHECKPOINT 1 — REPORTE DE EJECUCIÓN  Tarea completada correctamente.  El AI Agent procesó la consulta y generó una respuesta.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        752,
+        0
+      ],
+      "id": "3d4fdae9-6b56-4f82-9b13-c8c08ee7ee01",
+      "name": "Send a message",
+      "webhookId": "dbf75fe7-7b73-44c1-91f5-ddfcae16cd00",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "wCtKiHUAb72abRDh",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        208
+      ],
+      "id": "7bc68965-4b2b-4805-ac04-d4b3764495f4",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b0954650-fe16-4e61-bf18-5167951d5c92",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "26f11a0b9cae461a565d23800381bb2905b2cd871fc43f1bc9e536e7839c51a1"
+  },
+  "nodeGroups": [],
+  "id": "6RhLZTIXtKiUIVeh",
+  "tags": []
+}
